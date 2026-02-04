@@ -1,11 +1,8 @@
-// Play one round
-
 //generate random value between 0 and 2
 function getRandomInt() {
   return Math.floor(Math.random() * 3);
 }
 
-//Computer choice function
 function getComputerChoice() {
   //generate random value between 0 and 2 and store in variable random
   random = getRandomInt();
@@ -22,7 +19,9 @@ function getHumanChoice() {
 }
 
 // Play one round of the game
-function playRound(humanChoice, computerChoice) {
+function playRound(humanChoice) {
+  humanChoice = humanChoice.toLowerCase();
+  let computerChoice = getComputerChoice();
   // humanChoice === Rock
   if (humanChoice === "rock" && computerChoice === "paper") {
     return ++computerScore;
@@ -86,4 +85,57 @@ function playGame() {
 // initialize score values
 let humanScore = 0;
 let computerScore = 0;
-playGame();
+// Event listener
+
+const btnChoice = document.querySelectorAll("button");
+
+btnChoice.forEach((e) => {
+  e.addEventListener("click", () => {
+    playRound(e.textContent);
+    let winner = checkScore(humanScore, computerScore);
+
+    const h1Win = document.querySelector("#winnerAnnounce");
+
+    if (winner === "human") {
+      h1Win.textContent = "I WOOOOOONNNNNN GG";
+      div.appendChild(h1Win);
+      resetScore();
+    } else if (winner === "computer") {
+      h1Win.textContent = "Computer wooon not GG";
+      div.appendChild(h1Win);
+      resetScore();
+    }
+
+    // dom manipulation
+    const myChoice = document.querySelector("p");
+    myChoice.textContent = "My choice is: " + e.textContent;
+    const computerChoice = document.querySelector("#computerChoice");
+    computerChoice.textContent = "Computer choice is: " + random;
+    const myScore = document.querySelector("#myScore");
+    myScore.textContent = "My score is: " + humanScore;
+    const computerPscore = document.querySelector("#computerScore");
+    computerPscore.textContent = "Computer score is: " + computerScore;
+
+    div = document.querySelector("div");
+    div.appendChild(myChoice);
+    div.appendChild(computerChoice);
+    div.appendChild(myScore);
+    div.appendChild(computerPscore);
+  });
+});
+
+/* function that check the scores. 
+stop the game when someone has 5 points
+Display a message to announce the winner 
+reset scores to 0 
+*/
+
+function checkScore(humanScore, computerScore) {
+  if (humanScore === 5) return "human";
+  else if (computerScore === 5) return "computer";
+}
+
+function resetScore() {
+  humanScore = 0;
+  computerScore = 0;
+}
